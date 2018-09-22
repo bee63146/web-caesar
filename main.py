@@ -1,13 +1,23 @@
-from flask import Flask, request
+from flask import Flask, request, redirect
 from caesar import rotate_string
-
+import cgi
 
 app = Flask(__name__)
 
 app.config['DEBUG'] = True      # displays runtime errors in the browser, too
 
-add_form='''
+page_header= """
+<html>
+    <head>
+        <title>Web Caesar</title>
+    </head>
+    <body>
+        <h1>Web Caesar</h1>
+"""
+
+add_form = """
 <!DOCTYPE html>
+
 <html>
     <head>
         <style>
@@ -24,34 +34,35 @@ add_form='''
                 width: 540px;
                 height: 120px;
             }}
+            p.error {{
+                color: red;
+            }}
         </style>
     </head>
     <body>
-    <form>  
-    <form method="post">
-        <div>
-            <label for="rot"Rotate by:</label>
-            <input name="rot" value="0" type="text">
-        </div>
-        <textarea type="text"{0}name="text"></textarea>
-        <br>
-        <input type="submit">
-    </form>
+        <form action="/add" method="POST">
+            <div>
+                <label for="rot">Rotate by:</label>
+                <input type="text" name="rot" value="0">
+                <p class="error"></p>
+            </div>
+            <textarea type="text" name="text"></textarea>
+            <br>
+            <input type="submit">
+        </form>
     </body>
 </html>
-'''
+"""
+response = add_form + page_header
 
 @app.route("/")
 def index():
+    return add_form.format(...)
 
-    return add_form
-
-@app.route("/", methods=['POST'])
+@app.route('/encrypt', methods=['GET', 'POST'])
 def encrypt():
-    rotate_string = "<h1>text</h1>"
+    if request.method == 'POST':
 
-    return form.format(...)
-
-
+        return request(add_form + page_header)
 
 app.run()
