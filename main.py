@@ -1,58 +1,52 @@
-from flask import Flask, request, redirect
+from flask import Flask, request
 from caesar import rotate_string
-import cgi
 
 app = Flask(__name__)
-
-app.config['DEBUG'] = True      # displays runtime errors in the browser, too
+app.config['DEBUG'] = True
 
 form = """
 <!DOCTYPE html>
-
 <html>
-    <head><h1>Web Caesar</h1></head>
+    <head>
         <style>
-            form {
+            form {{
                 background-color: #eee;
                 padding: 20px;
                 margin: 0 auto;
                 width: 540px;
                 font: 16px sans-serif;
                 border-radius: 10px;
-            }
-            textarea {
+            }}
+            textarea {{
                 margin: 10px 0;
                 width: 540px;
                 height: 120px;
-            }
-            p.error {
-                color: red;
-            }
-        </style>         
+            }}
+        </style>
     </head>
     <body>
-        <form method="POST" action="post">
-            <div>
-                <label for="rot">Rotate by:</label>
-                <input type="text" name="rot" value="0">
-                <p class="error"></p>
-            </div>
-            <textarea type="text" name="text"></textarea>
-            <br>
-            <input type="submit">
-        </form>
+      <form method="POST">  
+        <label>Rotate by
+            <input type="text" name="rot" value="0"/>
+        </label>
+      <textarea name="text">{0}</textarea>
+      <input type="submit"/>
+      </form>
     </body>
 </html>
 """
 
-@app.route("/")
-def index():         
-    return form
-
-@app.route('/encrypt', methods=['POST'])
+@app.route("/", methods=['POST'])
 def encrypt():
-    rot= request.form[rotate_string]
-    return '<h1>Web Caesar, ' + rot + '</h1>'
+    rot = request.form['rot']
+    text = request.form['text']
+    rot = int(rot)
+    rotated = rotate_string(text, rot)
+    #return <h1>cgi.escape(rotated)</h1>
+    return form.format(rotated)
 
+@app.route("/")
+def index():
+    return form.format("")
 
 app.run()
