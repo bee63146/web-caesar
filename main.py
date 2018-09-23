@@ -6,41 +6,32 @@ app = Flask(__name__)
 
 app.config['DEBUG'] = True      # displays runtime errors in the browser, too
 
-page_header= """
-<html>
-    <head>
-        <title>Web Caesar</title>
-    </head>
-    <body>
-        <h1>Web Caesar</h1>
-"""
-
-add_form = """
+form = """
 <!DOCTYPE html>
 
 <html>
-    <head>
+    <head><h1>Web Caesar</h1></head>
         <style>
-            form {{
+            form {
                 background-color: #eee;
                 padding: 20px;
                 margin: 0 auto;
                 width: 540px;
                 font: 16px sans-serif;
                 border-radius: 10px;
-            }}
-            textarea {{
+            }
+            textarea {
                 margin: 10px 0;
                 width: 540px;
                 height: 120px;
-            }}
-            p.error {{
+            }
+            p.error {
                 color: red;
-            }}
-        </style>
+            }
+        </style>         
     </head>
     <body>
-        <form action="/add" method="POST">
+        <form method="POST" action="post">
             <div>
                 <label for="rot">Rotate by:</label>
                 <input type="text" name="rot" value="0">
@@ -53,16 +44,15 @@ add_form = """
     </body>
 </html>
 """
-response = add_form + page_header
 
 @app.route("/")
-def index():
-    return add_form.format(...)
+def index():         
+    return form
 
-@app.route('/encrypt', methods=['GET', 'POST'])
+@app.route('/encrypt', methods=['POST'])
 def encrypt():
-    if request.method == 'POST':
+    rot= request.form[rotate_string]
+    return '<h1>Web Caesar, ' + rot + '</h1>'
 
-        return request(add_form + page_header)
 
 app.run()
